@@ -66,7 +66,6 @@ func start(title: bool):
 		set_max_y(2048)
 		spawnPoint = Vector2(205, 850)
 		global_position = spawnPoint
-		camera.queue_free()
 
 func _process(_delta):
 	if !enable_camera:
@@ -78,6 +77,9 @@ func _process(_delta):
 			camera.position.y = -global_position.y + (max_y - max_y / 2)
 	
 	death_count_label.text = "Death Count: " + str(deathCount)
+	
+	if Global.editor_playing:
+		return
 	
 	#TODO: Do a better collision system
 	for i in get_slide_collision_count():
@@ -108,6 +110,8 @@ func _process(_delta):
 			prev_tile_id = tile_ground
 
 func _physics_process(delta):
+	if Global.editor_playing:
+		return
 	motion.y += G
 	if(motion.y > MAX_FALL_SPEED):
 		motion.y = MAX_SPEED
@@ -185,6 +189,12 @@ func die():
 
 func set_max_y(value: int):
 	max_y = value
+
+func test_play(play: bool):
+	if !play:
+		global_position = spawnPoint
+	camera.enabled = play
+	enable_camera = play
 
 func _on_PauseButton_pressed():
 	audio.playSFX(4)

@@ -236,7 +236,6 @@ offset_top = 225.0
 offset_right = 390.0
 offset_bottom = 295.0
 theme = ExtResource("8")
-disabled = true
 text = "Level Editor"
 
 [node name="QuitButton" type="Button" parent="Buttons"]

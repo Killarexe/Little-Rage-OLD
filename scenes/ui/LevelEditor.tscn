@@ -1,19 +1,228 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=26 format=3 uid="uid://cwah8nkjumxvb"]
 
-[ext_resource path="res://scripts/ui/Cursor.gd" type="Script" id=1]
-[ext_resource path="res://scenes/prefabs/Editor.tscn" type="PackedScene" id=2]
+[ext_resource type="Script" path="res://scripts/level/Level.gd" id="1_3p2ia"]
+[ext_resource type="Script" path="res://scripts/ui/LevelEditor.gd" id="1_d475x"]
+[ext_resource type="TileSet" uid="uid://dcovkjpnowgl0" path="res://textures/Tilesets.tres" id="2_fpapg"]
+[ext_resource type="Texture2D" uid="uid://cythhw1fv8erl" path="res://textures/uis/open.png" id="4_4qdjk"]
+[ext_resource type="Texture2D" uid="uid://ba5ax4butmys8" path="res://textures/uis/save.png" id="5_p4mnx"]
+[ext_resource type="Texture2D" uid="uid://c2p2sw0f5k3xl" path="res://textures/Tiles.png" id="6_s7sqf"]
+[ext_resource type="Texture2D" uid="uid://cx3f83u0o6e0r" path="res://textures/uis/right.png" id="7_x6wje"]
+
+[sub_resource type="Animation" id="Animation_6o1du"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_nttcm"]
+resource_name = "clouds"
+length = 5.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(8, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xu520"]
+_data = {
+"RESET": SubResource("Animation_6o1du"),
+"clouds": SubResource("Animation_nttcm")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0e7sb"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtbjc"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(32, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfeco"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(0, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6or6r"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(0, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5ew1"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(16, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xeln7"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(16, 128, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfdwn"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(96, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynjqp"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(64, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vd7up"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmdng"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(32, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cncls"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(64, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41t8t"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(64, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_egf7t"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(80, 64, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tyuka"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(80, 96, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvprf"]
+atlas = ExtResource("6_s7sqf")
+region = Rect2(80, 48, 48, 16)
 
 [node name="LevelEditor" type="Node2D"]
+script = ExtResource("1_d475x")
 
-[node name="Level" type="Node2D" parent="."]
+[node name="EditorLevel" type="Node2D" parent="."]
+script = ExtResource("1_3p2ia")
 
-[node name="Cursor" type="Node2D" parent="."]
-script = ExtResource( 1 )
+[node name="Map" type="TileMap" parent="EditorLevel"]
+tile_set = ExtResource("2_fpapg")
+format = 2
+layer_0/name = "Background"
+layer_0/z_index = -1
+layer_1/name = "DarkBackgound"
+layer_1/enabled = true
+layer_1/modulate = Color(0.501407, 0.501406, 0.501406, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = -1
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "Ground"
+layer_2/enabled = true
+layer_2/modulate = Color(1, 1, 1, 1)
+layer_2/y_sort_enabled = false
+layer_2/y_sort_origin = 0
+layer_2/z_index = 0
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "Foreground"
+layer_3/enabled = true
+layer_3/modulate = Color(1, 1, 1, 1)
+layer_3/y_sort_enabled = false
+layer_3/y_sort_origin = 0
+layer_3/z_index = 1
+layer_3/tile_data = PackedInt32Array()
 
-[node name="Sprite2D" type="Sprite2D" parent="Cursor"]
+[node name="Clouds" type="TileMap" parent="EditorLevel"]
+tile_set = ExtResource("2_fpapg")
+format = 2
+layer_0/name = "Clouds"
+layer_0/z_index = -2
 
-[node name="Editor" parent="." instance=ExtResource( 2 )]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EditorLevel/Clouds"]
+libraries = {
+"": SubResource("AnimationLibrary_xu520")
+}
 
-[node name="CameraContainer" type="Node2D" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="CameraContainer"]
+[node name="Buttons" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemList" type="ItemList" parent="UI/Buttons"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 80.0
+grow_vertical = 2
+item_count = 17
+max_columns = 0
+icon_mode = 0
+icon_scale = 16.0
+fixed_icon_size = Vector2i(4, 4)
+item_0/text = ""
+item_0/icon = ExtResource("4_4qdjk")
+item_1/text = ""
+item_1/icon = ExtResource("5_p4mnx")
+item_2/text = ""
+item_2/icon = SubResource("AtlasTexture_0e7sb")
+item_3/text = ""
+item_3/icon = SubResource("AtlasTexture_jtbjc")
+item_4/text = ""
+item_4/icon = SubResource("AtlasTexture_kfeco")
+item_5/text = ""
+item_5/icon = SubResource("AtlasTexture_6or6r")
+item_6/text = ""
+item_6/icon = SubResource("AtlasTexture_q5ew1")
+item_7/text = ""
+item_7/icon = SubResource("AtlasTexture_xeln7")
+item_8/text = ""
+item_8/icon = SubResource("AtlasTexture_jfdwn")
+item_9/text = ""
+item_9/icon = SubResource("AtlasTexture_ynjqp")
+item_10/text = ""
+item_10/icon = SubResource("AtlasTexture_vd7up")
+item_11/text = ""
+item_11/icon = SubResource("AtlasTexture_gmdng")
+item_12/text = ""
+item_12/icon = SubResource("AtlasTexture_cncls")
+item_13/text = ""
+item_13/icon = SubResource("AtlasTexture_41t8t")
+item_14/text = ""
+item_14/icon = SubResource("AtlasTexture_egf7t")
+item_15/text = ""
+item_15/icon = SubResource("AtlasTexture_tyuka")
+item_16/text = ""
+item_16/icon = SubResource("AtlasTexture_fvprf")
+
+[node name="PlayButton" type="TextureButton" parent="UI/Buttons"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -128.0
+offset_bottom = 128.0
+grow_horizontal = 0
+texture_normal = ExtResource("7_x6wje")
+stretch_mode = 5
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+
+[connection signal="item_selected" from="UI/Buttons/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="mouse_entered" from="UI/Buttons/ItemList" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/ItemList" to="." method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="UI/Buttons/PlayButton" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/PlayButton" to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="UI/Buttons/PlayButton" to="." method="_on_play_button_pressed"]

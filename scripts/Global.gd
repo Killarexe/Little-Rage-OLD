@@ -97,10 +97,8 @@ func loadGame():
 	HatManager.HATS = get_save_var(data, "hats", HatManager.HATS)
 	SkinManager.SKINS_SAVE = get_save_var(data, "skins", SkinManager.SKINS_DEFAULT)
 	LevelManager.SAVE_LEVELS = get_save_var(data, "levels", LevelManager.LEVELS_DEFAULT)
-	print(LevelManager.SAVE_LEVELS)
 	SkinManager.merge_save_default()
 	LevelManager.merge_save_default()
-	print(LevelManager.SAVE_LEVELS)
 	AudioServer.set_bus_volume_db(
 		AudioServer.get_bus_index("Music"),
 		get_save_var(data, "music_volume", 0)

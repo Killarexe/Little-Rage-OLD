@@ -42,6 +42,7 @@ func _unhandled_input(event):
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.zoom += Vector2(0.1, 0.1)
 	if event is InputEventMouseMotion:
+		print("??")
 		if is_panning:
 			camera.global_position -= event.relative * camera.zoom
 
