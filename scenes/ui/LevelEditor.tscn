@@ -152,6 +152,24 @@ libraries = {
 
 [node name="UI" type="CanvasLayer" parent="."]
 
+[node name="SaveDialog" type="FileDialog" parent="UI"]
+initial_position = 2
+title = "Save Level"
+size = Vector2i(1280, 720)
+ok_button_text = "Save"
+dialog_text = "Save level"
+access = 2
+show_hidden_files = true
+
+[node name="LoadDialog" type="FileDialog" parent="UI"]
+initial_position = 2
+title = "Open a Directory"
+size = Vector2i(1280, 720)
+ok_button_text = "Select This Folder"
+file_mode = 2
+access = 2
+show_hidden_files = true
+
 [node name="Buttons" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 15
@@ -220,6 +238,8 @@ stretch_mode = 5
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
 
+[connection signal="confirmed" from="UI/SaveDialog" to="." method="_on_save_dialog_confirmed"]
+[connection signal="dir_selected" from="UI/LoadDialog" to="." method="_on_load_dialog_dir_selected"]
 [connection signal="item_selected" from="UI/Buttons/ItemList" to="." method="_on_item_list_item_selected"]
 [connection signal="mouse_entered" from="UI/Buttons/ItemList" to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="UI/Buttons/ItemList" to="." method="_on_mouse_exited"]

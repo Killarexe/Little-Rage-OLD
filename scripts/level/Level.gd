@@ -1,12 +1,19 @@
 extends Node2D
 
 @onready var clouds = $Clouds/AnimationPlayer
+@onready var clouds_node = $Clouds
 @onready var map = $Map
 
 func _ready():
 	var playerNode = Global.instanceNodeAtPos(load("res://scenes/prefabs/Player.tscn"), self, Vector2(0, 0))
-	clouds.play("clouds")
-	playerNode.start(self.name == "TitleLevel" || self.name == "EditorLevel")
+	map.set_owner(self)
+	try_animate_clouds()
+	playerNode.start(self.name == "TitleLevel" || self.name.contains("Edit"))
+
+func try_animate_clouds():
+	if clouds != null:
+		clouds.play("clouds")
+		clouds.set_owner(clouds_node)
 
 func get_tile_data(data_name: String, tile_pos: Vector2) -> Variant:
 	var data: TileData = map.get_cell_tile_data(2, tile_pos)
@@ -22,14 +29,22 @@ func get_tile_id(cell_pos: Vector2i) -> Vector2i:
 
 func change_tile(tile_pos: Vector2i, tile_id: Vector2i):
 	map.set_cell(2, tile_pos, 1, tile_id, 0)
-	
+
+func filter_used_grass_cells() -> Array[Vector2i]:
+	var used_grass_cells: Array[Vector2i] = [];
+	for cell in map.get_used_cells(2):
+		var type: Vector2i = map.get_cell_atlas_coords(2, cell)
+		if type.x >=0 && type.x <= 9 && type.y >= 0 && type.y <= 2:
+			used_grass_cells.append(cell)
+	return used_grass_cells
+
 func change_tile_and_update(tile_pos: Vector2i, tile_id: Vector2i):
 	map.set_cell(2, tile_pos, 1, tile_id, 0)
-	map.set_cells_terrain_connect(2, map.get_used_cells(2), 0, 0, false)
+	map.set_cells_terrain_connect(2, filter_used_grass_cells(), 0, 0, false)
 
 func remove_tile_and_update(tile_pos: Vector2i):
 	map.erase_cell(2, tile_pos)
-	map.set_cells_terrain_connect(2, map.get_used_cells(2), 0, 0, false)
+	map.set_cells_terrain_connect(2, filter_used_grass_cells(), 0, 0, false)
 
 func replace_tile_by(old_tile_id: Vector2i, new_tile_id: Vector2i):
 	for cell_pos in map.get_used_cells_by_id(2, -1, old_tile_id):

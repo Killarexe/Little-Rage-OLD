@@ -18,6 +18,8 @@ const TILES: Array = [
 	Vector2(6, 3)
 ]
 
+@onready var save_dialog: FileDialog = $UI/SaveDialog
+@onready var load_dialog: FileDialog = $UI/LoadDialog
 @onready var camera: Camera2D = $Camera2D
 @onready var level: Node2D = $EditorLevel
 
@@ -45,7 +47,6 @@ func _unhandled_input(event):
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.zoom += Vector2(0.1, 0.1)
 	if event is InputEventMouseMotion:
-		print("Motion..")
 		if is_panning:
 			camera.global_position -= event.relative * camera.zoom * 1000
 
@@ -77,8 +78,11 @@ func _draw():
 		draw_texture_rect_region(tile_texture, Rect2(tile_pos * 16, Vector2(16, 16)), Rect2(16 * offset_x, 16 * offset_y, 16, 16))
 
 func _on_item_list_item_selected(index: int):
+	if index == 0:
+		load_dialog.visible = true
+	elif index == 1:
+		save_dialog.visible = true
 	current_tile = index - 2
-	print(current_tile)
 
 func _on_mouse_entered():
 	can_place = false
@@ -93,3 +97,33 @@ func _on_play_button_pressed():
 	Global.editor_playing = !Global.editor_playing
 	camera.enabled = Global.editor_playing
 	player.test_play(!Global.editor_playing)
+
+func _on_load_dialog_dir_selected(dir):
+	var tmp: PackedStringArray = dir.split("/")
+	var name: String = tmp[tmp.size() - 1]
+	var level_scene_res: Resource = ResourceLoader.load(dir + "/" + name + ".tscn")
+	var level_clouds_scene_res: Resource = ResourceLoader.load(dir + "/" + name + "_clouds.tscn")
+	level.queue_free()
+	var level_scene: Node2D = Global.instanceNode(level_scene_res, self)
+	var level_clouds_scene: Node2D = Global.instanceNode(level_clouds_scene_res, level_scene)
+	level_scene.clouds_node = level_clouds_scene
+	level_scene.clouds = level_clouds_scene.get_child(0)
+	level_scene.try_animate_clouds()
+	level = level_scene
+	load_dialog.visible = false
+
+func _on_save_dialog_confirmed():
+	var path: String = save_dialog.get_current_path()
+	var tmp: PackedStringArray = path.split("/")
+	var name: String = tmp[tmp.size() - 1]
+	if name == null || name.is_empty():
+		return
+	DirAccess.make_dir_absolute(path)
+	var level_scene: PackedScene = PackedScene.new()
+	var clouds_scene: PackedScene = PackedScene.new()
+	level.name = name + "_Edit"
+	level_scene.pack(level)
+	clouds_scene.pack(level.clouds_node)
+	ResourceSaver.save(level_scene, path + "/" + name + ".tscn")
+	ResourceSaver.save(clouds_scene, path + "/" + name + "_clouds.tscn")
+	save_dialog.visible = false
